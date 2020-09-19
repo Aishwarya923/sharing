@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="question_choice">
+    <question_choice action="DELETE">
+        <misc>0</misc>
+        <order>100</order>
+        <question display_value="Temp">70f6ac9c2f13101064e63f96f699b6ac</question>
+        <rec_misc>0</rec_misc>
+        <sys_class_name>question_choice</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2020-09-12 18:04:15</sys_created_on>
+        <sys_id>125724dc2f13101064e63f96f699b693</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Choice 1</sys_name>
+        <sys_package display_value="Sharing" source="x_8899_sharing">8b8c9c542f13101064e63f96f699b6be</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Sharing">8b8c9c542f13101064e63f96f699b6be</sys_scope>
+        <sys_update_name>question_choice_125724dc2f13101064e63f96f699b693</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2020-09-12 18:04:15</sys_updated_on>
+        <text>Choice 1</text>
+        <value/>
+    </question_choice>
+    <fx_price action="DELETE" query="id=125724dc2f13101064e63f96f699b693"/>
+    <fx_price action="DELETE">
+        <amount>0</amount>
+        <currency display_value="USD">USD</currency>
+        <field>misc</field>
+        <id>125724dc2f13101064e63f96f699b693</id>
+        <parent/>
+        <reference_amount>0</reference_amount>
+        <reference_currency display_value="USD">USD</reference_currency>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2020-09-12 18:04:15</sys_created_on>
+        <sys_id>cd6724dc2f13101064e63f96f699b67c</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2020-09-12 18:04:15</sys_updated_on>
+        <table>question_choice</table>
+        <type>calculated</type>
+    </fx_price>
+    <fx_price action="DELETE">
+        <amount>0</amount>
+        <currency display_value="USD">USD</currency>
+        <field>rec_misc</field>
+        <id>125724dc2f13101064e63f96f699b693</id>
+        <parent/>
+        <reference_amount>0</reference_amount>
+        <reference_currency display_value="USD">USD</reference_currency>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2020-09-12 18:04:15</sys_created_on>
+        <sys_id>856724dc2f13101064e63f96f699b67c</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2020-09-12 18:04:15</sys_updated_on>
+        <table>question_choice</table>
+        <type>calculated</type>
+    </fx_price>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Sharing">8b8c9c542f13101064e63f96f699b6be</application>
+        <file_path/>
+        <instance_id>2296467edb13c0503050ac44d4961920</instance_id>
+        <instance_name>dev102394</instance_name>
+        <name>question_choice_125724dc2f13101064e63f96f699b693</name>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="question_choice"><question_choice action="INSERT_OR_UPDATE"><misc>0</misc><order>100</order><question display_value="Temp">70f6ac9c2f13101064e63f96f699b6ac</question><rec_misc>0</rec_misc><sys_class_name>question_choice</sys_class_name><sys_created_by>admin</sys_created_by><sys_created_on>2020-09-12 18:04:15</sys_created_on><sys_id>125724dc2f13101064e63f96f699b693</sys_id><sys_mod_count>0</sys_mod_count><sys_name>Choice 1</sys_name><sys_package display_value="Sharing" source="x_8899_sharing">8b8c9c542f13101064e63f96f699b6be</sys_package><sys_policy/><sys_scope display_value="Sharing">8b8c9c542f13101064e63f96f699b6be</sys_scope><sys_update_name>question_choice_125724dc2f13101064e63f96f699b693</sys_update_name><sys_updated_by>admin</sys_updated_by><sys_updated_on>2020-09-12 18:04:15</sys_updated_on><text>Choice 1</text><value/></question_choice><fx_price action="delete_multiple" query="id=125724dc2f13101064e63f96f699b693"/><fx_price action="INSERT_OR_UPDATE"><amount>0</amount><currency display_value="USD">USD</currency><field>misc</field><id>125724dc2f13101064e63f96f699b693</id><parent/><reference_amount>0</reference_amount><reference_currency display_value="USD">USD</reference_currency><sys_created_by>admin</sys_created_by><sys_created_on>2020-09-12 18:04:15</sys_created_on><sys_id>cd6724dc2f13101064e63f96f699b67c</sys_id><sys_mod_count>0</sys_mod_count><sys_updated_by>admin</sys_updated_by><sys_updated_on>2020-09-12 18:04:15</sys_updated_on><table>question_choice</table><type>calculated</type></fx_price><fx_price action="INSERT_OR_UPDATE"><amount>0</amount><currency display_value="USD">USD</currency><field>rec_misc</field><id>125724dc2f13101064e63f96f699b693</id><parent/><reference_amount>0</reference_amount><reference_currency display_value="USD">USD</reference_currency><sys_created_by>admin</sys_created_by><sys_created_on>2020-09-12 18:04:15</sys_created_on><sys_id>856724dc2f13101064e63f96f699b67c</sys_id><sys_mod_count>0</sys_mod_count><sys_updated_by>admin</sys_updated_by><sys_updated_on>2020-09-12 18:04:15</sys_updated_on><table>question_choice</table><type>calculated</type></fx_price></record_update>]]></payload>
+        <payload_hash>1833982901</payload_hash>
+        <record_name>Choice 1</record_name>
+        <reverted_from/>
+        <source>b6e66c9c2f13101064e63f96f699b656</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2020-09-12 18:04:15</sys_created_on>
+        <sys_id>cd6724dc2f13101064e63f96f699b67f</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>174837d371b0000001</sys_recorded_at>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2020-09-12 18:04:15</sys_updated_on>
+        <type>Question Choice</type>
+        <update_guid>096724dcbb131010fa8c041083d33b7f</update_guid>
+        <update_guid_history>096724dcbb131010fa8c041083d33b7f:1833982901</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete display_value="Choice 1">46e968502f53101064e63f96f699b65e</sys_audit_delete>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2020-09-12 18:15:14</sys_created_on>
+        <sys_db_object display_value="" name="question_choice">question_choice</sys_db_object>
+        <sys_id>07d45cd75d6b444ebbaf76fa562ddd84</sys_id>
+        <sys_metadata>125724dc2f13101064e63f96f699b693</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Choice 1</sys_name>
+        <sys_package display_value="Sharing" source="x_8899_sharing">8b8c9c542f13101064e63f96f699b6be</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_scope display_value="Sharing">8b8c9c542f13101064e63f96f699b6be</sys_scope>
+        <sys_scope_delete display_value="">d18200cc72f048e8b3591f1686af1440</sys_scope_delete>
+        <sys_update_name>question_choice_125724dc2f13101064e63f96f699b693</sys_update_name>
+        <sys_update_version display_value="question_choice_125724dc2f13101064e63f96f699b693">cd6724dc2f13101064e63f96f699b67f</sys_update_version>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2020-09-12 18:15:14</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

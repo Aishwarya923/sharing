@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_script">
+    <sys_script action="INSERT_OR_UPDATE">
+        <abort_action>false</abort_action>
+        <access>package_private</access>
+        <action_delete>false</action_delete>
+        <action_insert>true</action_insert>
+        <action_query>false</action_query>
+        <action_update>true</action_update>
+        <active>true</active>
+        <add_message>false</add_message>
+        <advanced>true</advanced>
+        <change_fields>false</change_fields>
+        <client_callable>false</client_callable>
+        <collection>sys_filter</collection>
+        <condition/>
+        <description/>
+        <execute_function>false</execute_function>
+        <filter_condition table="sys_filter">titleENDSWITH-slow^EQ<item endquery="false" field="title" goto="false" newquery="false" operator="ENDSWITH" or="false" value="-slow"/>
+            <item endquery="true" field="" goto="false" newquery="false" operator="=" or="false" value=""/>
+        </filter_condition>
+        <is_rest>false</is_rest>
+        <message/>
+        <name>Create Quick Filter</name>
+        <order>100</order>
+        <priority>100</priority>
+        <rest_method/>
+        <rest_method_text/>
+        <rest_service/>
+        <rest_service_text/>
+        <rest_variables/>
+        <role_conditions/>
+        <script><![CDATA[// Create Quick Query Filter - Business Rule
+(function executeRule(current, previous /*null when async*/) {
+    var labelSid = "";
+    var labelTable = {};
+    var tagName = "filter_" + String(current.sys_id); // This makes the tagName unique - Not likely to be used anywhere else
+    var hiddenTagsGroup = "6986029a2f17501064e63f96f699b6fa"; // Hidden Tags (Empty group)
+    var refreshRecords = false; // Used to trigger forceUpdate to tag existing records
+
+    // Query the label_auto many to many table to check if this quick query tag already exists, and if not, to create it
+    var query = "label.name=" + tagName + "^table.title=" + tagName + "^table.table=" + String(current.table);
+    var label2Table = new GlideRecord("label_auto");
+    label2Table.addEncodedQuery(query);
+    label2Table.query();
+    if (label2Table.next()) {
+        // Exists - Update Conditions for Labels Table record filter
+        labelTable = label2Table.table.getRefRecord();
+        if (labelTable.isValidRecord()) {
+            if (String(labelTable.conditions) != String(current.filter)) {
+                labelTable.conditions = String(current.filter);
+                labelTable.update();
+
+                refreshRecords = true;
+            }
+        }
+        labelSid = String(label2Table.label);
+    }
+    else {
+        // Create label AKA Tag record
+        var label = new GlideRecord("label");
+        label.name = tagName;
+        label.active = true;
+        label.owner = ""; // Clear the owner so that the tag is not visible by the logged in user
+        label.viewable_by = "groups and users";
+        label.group_list = hiddenTagsGroup; // Hidden Tags (Empty group)
+        label.type = "standard";
+        //label.setWorkflow(false); // This may only work in Global app scope
+        labelSid = label.insert();
+        
+        /** Custom scope implementation - uses globally scoped script include utility */
+        // Update label AKA Tag to clear the owner field - this hides the label from the current user
+        var fieldObj = [
+            { name: "owner", value: "" }
+        ];
+        var targetTable = "label";
+        var triggerWorkflow = false; // This is required to prevent owner field from being populated
+        (new global.GlobalUtils()).updateGlobalRecord(targetTable, labelSid, fieldObj, triggerWorkflow);
+
+        // Create Label Table record (uses the filter condtion)
+        labelTable = new GlideRecord("label_table");
+        labelTable.initialize();
+        labelTable.title = tagName;
+        labelTable.table = String(current.table);
+        labelTable.conditions = String(current.filter);
+        var labelTableSid = labelTable.insert();
+
+        // Create Conditions for Label m2m record
+        label2Table.initialize();
+        label2Table.label = String(labelSid);
+        label2Table.table = String(labelTableSid);
+        label2Table.insert();
+
+        refreshRecords = true;
+    }
+
+    // Setup new quick filter record variables
+    var newFilterName = String(current.title).split("-slow")[0] + "-quick";
+    // Tag encoded query format: sys_tags.f1ae4e1e2f17501064e63f96f699b66f=f1ae4e1e2f17501064e63f96f699b66f
+    var newFilterQuery = "sys_tags.${tag_sid}=${tag_sid}";
+    // Update the newFilterQuery with the sys_id of the label/Tag record
+    newFilterQuery = newFilterQuery.replaceAll("${tag_sid}", String(labelSid));
+
+    // Create a new quick filter record
+    var newFilter = new GlideRecord(current.getTableName());
+    newFilter.addEncodedQuery("title", newFilterName);
+    newFilter.query();
+    if (newFilter.hasNext()) {
+        // Exists - do nothing
+    }
+    else {
+        // Create a new Filter
+        var fieldObj = [
+            { name: "title", value: newFilterName },
+            { name: "table", value: String(current.table) },
+            { name: "filter", value: newFilterQuery }
+        ];
+
+		(new global.GlobalUtils()).insertGlobalRecord(String(current.getTableName()), fieldObj);
+    }
+
+})(current, previous);]]></script>
+        <sys_class_name>sys_script</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2020-09-19 11:06:42</sys_created_on>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>56aa479e2f1b501064e63f96f699b6ac</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Create Quick Filter</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="Sharing" source="x_8899_sharing">8b8c9c542f13101064e63f96f699b6be</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Sharing">8b8c9c542f13101064e63f96f699b6be</sys_scope>
+        <sys_update_name>sys_script_56aa479e2f1b501064e63f96f699b6ac</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2020-09-19 11:06:42</sys_updated_on>
+        <template/>
+        <when>async</when>
+    </sys_script>
+    <sys_translated_text action="delete_multiple" query="documentkey=56aa479e2f1b501064e63f96f699b6ac"/>
+</record_update>

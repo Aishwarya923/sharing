@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_metadata_link">
+    <sys_metadata_link action="INSERT_OR_UPDATE">
+        <directory>update</directory>
+        <documentkey>3373a6922f97501064e63f96f699b6a2</documentkey>
+        <payload>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;record_update table="sys_script_include"&gt;
+    &lt;sys_script_include action="INSERT_OR_UPDATE"&gt;
+        &lt;access&gt;public&lt;/access&gt;
+        &lt;active&gt;true&lt;/active&gt;
+        &lt;api_name&gt;global.GlobalUtils&lt;/api_name&gt;
+        &lt;caller_access/&gt;
+        &lt;client_callable&gt;false&lt;/client_callable&gt;
+        &lt;description&gt;Global Scope Adapter Utility&lt;/description&gt;
+        &lt;name&gt;GlobalUtils&lt;/name&gt;
+        &lt;script&gt;&lt;![CDATA[var GlobalUtils = Class.create();
+GlobalUtils.prototype = {
+    initialize: function () { },
+
+    /** Update a GlideRecord via Global Application scope
+     * 
+     * @param tableName - target table name to use for GlideRecord
+     * @param grSid - target sys_id to get for update
+     * @param grFieldObj - JSON array of objects: [ { name: "fieldName", value: "targetValue"}]
+     * @param triggerWorkflow - Set to true of false prior to update: gr.setWorkflow(triggerWorkflow);
+     */
+    updateGlobalRecord: function (tableName, grSid, grFieldObj, triggerWorkflow) {
+        var gr = new GlideRecord(tableName);
+        if (gr.get(grSid)) {
+            for (var f in grFieldObj) {
+                gr[grFieldObj[f].name] = grFieldObj[f].value;
+            }
+        }
+        if (!gs.nil(triggerWorkflow) &amp;&amp; !triggerWorkflow) {
+            gr.setWorkflow(triggerWorkflow);
+        }
+        gr.update();
+        gr.setWorkflow(true); // Revert workflow state on the GlideRecord
+    },
+    /** Insert a GlideRecord via Global Application scope
+     * 
+     * @param tableName - target table name to use for GlideRecord
+     * @param grFieldObj - JSON array of objects: [ { name: "fieldName", value: "targetValue"}]
+     * @param triggerWorkflow - Set to true of false prior to update: gr.setWorkflow(triggerWorkflow);
+     */
+    insertGlobalRecord: function (tableName, grFieldObj, triggerWorkflow) {
+        var gr = new GlideRecord(tableName);
+        for (var f in grFieldObj) {
+            gr[grFieldObj[f].name] = grFieldObj[f].value;
+        }
+        if (!gs.nil(triggerWorkflow) &amp;&amp; !triggerWorkflow) {
+            gr.setWorkflow(triggerWorkflow);
+        }
+        return gr.insert();
+    },
+
+    type: 'GlobalUtils'
+};]]&gt;&lt;/script&gt;
+        &lt;sys_class_name&gt;sys_script_include&lt;/sys_class_name&gt;
+        &lt;sys_created_by&gt;admin&lt;/sys_created_by&gt;
+        &lt;sys_created_on&gt;2020-09-19 08:16:24&lt;/sys_created_on&gt;
+        &lt;sys_id&gt;3373a6922f97501064e63f96f699b6a2&lt;/sys_id&gt;
+        &lt;sys_mod_count&gt;4&lt;/sys_mod_count&gt;
+        &lt;sys_name&gt;GlobalUtils&lt;/sys_name&gt;
+        &lt;sys_package display_value="Global" source="global"&gt;global&lt;/sys_package&gt;
+        &lt;sys_policy/&gt;
+        &lt;sys_scope display_value="Global"&gt;global&lt;/sys_scope&gt;
+        &lt;sys_update_name&gt;sys_script_include_3373a6922f97501064e63f96f699b6a2&lt;/sys_update_name&gt;
+        &lt;sys_updated_by&gt;admin&lt;/sys_updated_by&gt;
+        &lt;sys_updated_on&gt;2020-09-19 08:51:50&lt;/sys_updated_on&gt;
+    &lt;/sys_script_include&gt;
+&lt;/record_update&gt;
+</payload>
+        <sys_class_name>sys_metadata_link</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2020-09-19 12:26:40</sys_created_on>
+        <sys_id>804dd3522f9b501064e63f96f699b616</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>GlobalUtils</sys_name>
+        <sys_package display_value="Sharing" source="x_8899_sharing">8b8c9c542f13101064e63f96f699b6be</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Sharing">8b8c9c542f13101064e63f96f699b6be</sys_scope>
+        <sys_update_name>sys_metadata_link_804dd3522f9b501064e63f96f699b616</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2020-09-19 12:26:40</sys_updated_on>
+        <tablename>sys_script_include</tablename>
+    </sys_metadata_link>
+</record_update>

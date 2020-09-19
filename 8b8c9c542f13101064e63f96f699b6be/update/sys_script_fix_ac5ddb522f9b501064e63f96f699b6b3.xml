@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_fix">
+    <sys_script_fix action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <before>false</before>
+        <description>Updates metasnapshot files to global scope</description>
+        <flush_cache>false</flush_cache>
+        <name>Set Global Scope</name>
+        <record_for_rollback>false</record_for_rollback>
+        <run_once>false</run_once>
+        <script><![CDATA[fixScope("sys_script_include", "3373a6922f97501064e63f96f699b6a2", "global"); // GlobalUtils
+function fixScope(tableName, recordSid, targetScope) {
+	var gr = new GlideRecord(String(tableName));
+	if (gr.get(String(recordSid))) {
+		gr.sys_scope = String(targetScope);
+		gr.update();
+	}
+}]]></script>
+        <sys_class_name>sys_script_fix</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2020-09-19 12:35:57</sys_created_on>
+        <sys_id>ac5ddb522f9b501064e63f96f699b6b3</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Set Global Scope</sys_name>
+        <sys_package display_value="Sharing" source="x_8899_sharing">8b8c9c542f13101064e63f96f699b6be</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Sharing">8b8c9c542f13101064e63f96f699b6be</sys_scope>
+        <sys_update_name>sys_script_fix_ac5ddb522f9b501064e63f96f699b6b3</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2020-09-19 12:35:57</sys_updated_on>
+        <unloadable>false</unloadable>
+    </sys_script_fix>
+</record_update>
