@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_fix">
+    <sys_script_fix action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <before>false</before>
+        <description>Demo Sync vs Async RESTMessageV2 calls</description>
+        <flush_cache>false</flush_cache>
+        <name>Test Async Endpoint</name>
+        <record_for_rollback>false</record_for_rollback>
+        <run_once>true</run_once>
+        <script><![CDATA[// Fix Script Test Async REST Message call
+try {
+    var r = new sn_ws.RESTMessageV2('x_8899_sharing.Async Endpoint', 'Default GET');
+	
+	// SYNC
+	//gs.info("SYNC - Call triggered at " + (new GlideDateTime()).getDisplayValue());
+    //var response = r.execute();
+	//gs.info("SYNC - response logged at " + (new GlideDateTime()).getDisplayValue() + ": " + JSON.stringify(response.getBody()));
+	
+	// ASYNC
+	gs.info("ASYNC - Call triggered at " + (new GlideDateTime()).getDisplayValue());
+    var response = r.executeAsync();
+    //response.waitForResponse(60); // 60 secs timeout | forces back to synchronous | BAD
+	gs.info("ASYNC - response logged at " + (new GlideDateTime()).getDisplayValue());
+    
+	//var responseBody = response.getBody();
+    //var httpStatus = response.getStatusCode();
+} catch (ex) {
+    var message = ex.message;
+}]]></script>
+        <sys_class_name>sys_script_fix</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2020-09-26 11:01:51</sys_created_on>
+        <sys_id>a75c47e82fab101064e63f96f699b6c5</sys_id>
+        <sys_mod_count>9</sys_mod_count>
+        <sys_name>Test Async Endpoint</sys_name>
+        <sys_package display_value="Sharing" source="x_8899_sharing">8b8c9c542f13101064e63f96f699b6be</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Sharing">8b8c9c542f13101064e63f96f699b6be</sys_scope>
+        <sys_update_name>sys_script_fix_a75c47e82fab101064e63f96f699b6c5</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2020-09-26 11:29:32</sys_updated_on>
+        <unloadable>false</unloadable>
+    </sys_script_fix>
+</record_update>

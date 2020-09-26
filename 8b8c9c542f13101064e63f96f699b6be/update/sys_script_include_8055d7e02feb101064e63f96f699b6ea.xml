@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>public</access>
+        <active>true</active>
+        <api_name>x_8899_sharing.IntegrationUtil</api_name>
+        <caller_access/>
+        <client_callable>false</client_callable>
+        <description>This callback class can be called via the async response handler business rule on the ecc_queue table&#13;
+ * Callback class constructor parameter: responseObj = { status: "", responseBody: "" }&#13;
+ * status - HTTP status of REST API call attempt&#13;
+ * responseBody - Stringified response to REST API call attempt&#13;
+ * Optionally use a custom JSON Object as a callback function parameter. Ex: callBack: function(myObj) {</description>
+        <name>IntegrationUtil</name>
+        <script><![CDATA[var IntegrationUtil = Class.create();
+IntegrationUtil.prototype = {
+    initialize: function(responseObj) {
+        this.responseObj = responseObj;
+    },
+	
+	Get: function () {
+        var callbackInfo = {
+            callback_class: "x_8899_sharing.IntegrationUtil",
+            callback_function: "getCallback",
+            callback_parameter_obj: {
+                key1: "val1",
+                key2: "val2"
+            }
+        };
+        var message = new sn_ws.RESTMessageV2();
+        message.setEndpoint("https://dev102394.service-now.com/api/x_8899_sharing/asynctest");
+        message.setHttpMethod("GET");
+		message.setMIDServer("midserv_dev01");
+        for (var p in callbackInfo) {
+            message.setEccParameter(p, String(callbackInfo[p]));
+        }
+		message.setEccParameter("callback_parameter_obj", JSON.stringify(callbackInfo.callback_parameter_obj));
+        message.setEccParameter('skip_sensor', 'true');
+        message.executeAsync();
+    },
+	
+	getCallback: function (parmObj) {
+		try {
+            if (!gs.nil(this.responseObj)) {
+                if (this.responseObj.status == 200) {
+                    // Success!
+                    var parsedResponse = JSON.parse(this.responseObj.responseBody);
+                    gs.info("ASYNC - parsedResponse: " + JSON.stringify(parsedResponse));
+                    gs.info("ASYNC - parmObj: " + JSON.stringify(parmObj));
+                } else {
+                    //Failure!
+                }
+            }
+        } catch (err) {
+            gs.error("ASYNC: " + err);
+        }
+	},
+	
+    type: 'IntegrationUtil'
+};]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2020-09-26 11:45:45</sys_created_on>
+        <sys_id>8055d7e02feb101064e63f96f699b6ea</sys_id>
+        <sys_mod_count>4</sys_mod_count>
+        <sys_name>IntegrationUtil</sys_name>
+        <sys_package display_value="Sharing" source="x_8899_sharing">8b8c9c542f13101064e63f96f699b6be</sys_package>
+        <sys_policy>read</sys_policy>
+        <sys_scope display_value="Sharing">8b8c9c542f13101064e63f96f699b6be</sys_scope>
+        <sys_update_name>sys_script_include_8055d7e02feb101064e63f96f699b6ea</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2020-09-26 12:36:23</sys_updated_on>
+        <u_callback_class>true</u_callback_class>
+    </sys_script_include>
+</record_update>
