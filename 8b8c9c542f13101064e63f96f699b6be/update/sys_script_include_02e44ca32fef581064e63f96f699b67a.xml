@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>public</access>
+        <active>true</active>
+        <api_name>x_8899_sharing.AutoScaleEventQueues</api_name>
+        <caller_access/>
+        <client_callable>false</client_callable>
+        <description>/*** Create and consume this Script Include in the Global application scope. This is here for reference! **/&#13;
+Utility used to auto-scale event queues for performance processing purposes </description>
+        <name>AutoScaleEventQueues</name>
+        <script><![CDATA[//@ts-check
+var AutoScaleEventQueues = Class.create();
+AutoScaleEventQueues.prototype = {
+    initialize: function (qLimit, wLimit) {
+        this.queueLimit = 50; // Message limit per queue
+        if (!gs.nil(qLimit)) {
+            this.queueLimit = qLimit;
+        }
+        this.workerLimit = 0; // Maximum number of background workers per node (default = 0 No Limit)
+        if (!gs.nil(wLimit)) {
+            this.workerLimit = wLimit;
+        }
+    },
+
+    getQueueName: function (primaryQueueName) {
+        var queueName = "";
+        var queueCheck = primaryQueueName;
+        var queueNum = 0;
+        var newQueueName = "";
+        while (this._isQueueAtCapacity(queueCheck, queueNum)) {
+            if (this.workerLimit > 0 && queueNum == this.workerLimit) {
+                // Send event to random queue 
+                var num = Math.floor(Math.random() * queueNum) + 1;     // returns a random integer from 1 to queueNum
+                // Drop next message into random queue by setting newQueueName value to a random queue name
+                if (queueCheck == primaryQueueName) {
+                    newQueueName = primaryQueueName + "_" + String(num);
+                }
+                else {
+                    newQueueName = String(queueCheck).substr(0, String(queueCheck).indexOf("_" + queueNum));
+                    newQueueName = newQueueName + "_" + String(num);
+                }
+                break; // Exit loop to use the random queue name
+            }
+            else {
+                if (queueCheck == primaryQueueName) {
+                    // Format the initial queueName as primaryQueueName_1
+                    queueNum++;
+                    queueCheck = primaryQueueName + "_" + queueNum;
+                }
+                else {
+                    // Format the queueName by incrementing the queueName suffix by 1 more
+                    queueCheck = String(queueCheck).substr(0, String(queueCheck).indexOf("_" + queueNum));
+                    queueNum++;
+                    queueCheck = queueCheck + "_" + queueNum;
+                }
+            }
+        }
+        queueName = gs.nil(newQueueName) ? queueCheck : newQueueName;
+        this._validateQueueJobExists(queueName);
+        return queueName;
+    },
+
+    _validateQueueJobExists: function (queueName) {
+        var jobContext = "fcScriptName=javascript\\:GlideEventManager('" + queueName + "').process();";
+        var query = "job_id=81c92ce9c0a8016400e5f0d2f784ea78^parentISEMPTY^trigger_type=10^job_contextLIKE" + jobContext;
+        var gr = new GlideRecord("sys_trigger");
+        gr.addEncodedQuery(query);
+        gr.query();
+        if (gr.next()) {
+            // Found. DO nothing
+        }
+        else {
+            gr.initialize();
+            gr.name = queueName;
+            gr.job_id = "81c92ce9c0a8016400e5f0d2f784ea78"; // RunScriptJob
+            gr.state = 0; // Ready
+            gr.trigger_type = 10; // Interval
+            var dto = new GlideDateTime();
+            dto.addSeconds(30);
+            gr.next_action = dto.getDisplayValue();
+            gr.job_context.setDisplayValue(String(jobContext));
+            gr.repeat.setDisplayValue("0 00:00:05");
+            gr.insert();
+        }
+    },
+
+    _isQueueAtCapacity: function (queueName, num) {
+        var atCapacity = true;
+        if (num >= 3) {
+            atCapacity = false;
+        }
+
+        // Check event table based on max capacity specification
+        var continuouslyOverLimit = false;
+        var underLimit = false;
+        for (var i = 0; i < 5; i++) {
+            if (this._queueOverLimit(queueName)) {
+                gs.debug(queueName + " query (" + i + ") is at Capacity");
+            }
+            else {
+                gs.debug(queueName + " query (" + i + ") is under Capacity");
+                underLimit = true;
+            }
+        }
+        if (underLimit == false) {
+            continuouslyOverLimit = true;
+        }
+        atCapacity = continuouslyOverLimit;
+        gs.debug(queueName + " returning atCapacity: " + atCapacity);
+        return atCapacity;
+    },
+
+    _queueOverLimit: function (queueName) {
+        var overLimit = false;
+        var query = "stateNOT INprocessed,error,reprocessed,transferred^queue=" + String(queueName);
+        var tableName = "sysevent";
+        if (this.countRecords(tableName, query) >= this.queueLimit) {
+            overLimit = true;
+        }
+        return overLimit;
+    },
+
+    countRecords: function (table, query) {
+		var count = 0;
+        var rec = new GlideAggregate(table);
+        rec.addAggregate('COUNT');
+        rec.addEncodedQuery(query);
+        rec.query();
+        if (rec.next()) {
+            count = rec.getAggregate('COUNT');
+        }
+        return count;
+    },
+
+    type: 'AutoScaleEventQueues'
+};]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2020-10-05 04:09:33</sys_created_on>
+        <sys_id>02e44ca32fef581064e63f96f699b67a</sys_id>
+        <sys_mod_count>2</sys_mod_count>
+        <sys_name>AutoScaleEventQueues</sys_name>
+        <sys_package display_value="Sharing" source="x_8899_sharing">8b8c9c542f13101064e63f96f699b6be</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Sharing">8b8c9c542f13101064e63f96f699b6be</sys_scope>
+        <sys_update_name>sys_script_include_02e44ca32fef581064e63f96f699b67a</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2020-10-05 04:42:51</sys_updated_on>
+        <u_callback_class>false</u_callback_class>
+    </sys_script_include>
+</record_update>

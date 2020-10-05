@@ -6,7 +6,7 @@
         <action_insert>true</action_insert>
         <action_query>false</action_query>
         <action_update>false</action_update>
-        <active>false</active>
+        <active>true</active>
         <add_message>false</add_message>
         <advanced>true</advanced>
         <change_fields>false</change_fields>
@@ -21,7 +21,7 @@
         </filter_condition>
         <is_rest>false</is_rest>
         <message/>
-        <name>Async Integration Sensor</name>
+        <name>Async Integration Sensor (evnt) v2</name>
         <order>100</order>
         <priority>100</priority>
         <rest_method/>
@@ -31,45 +31,30 @@
         <rest_variables/>
         <role_conditions/>
         <script><![CDATA[(function executeRule(current, previous /*null when async*/) {
-
-    // Processing the response from the ECC queue record
-    var glideUtil = new global.GlobalUtils();
-
-    // Get the response data
-    var responseObj = {
-        responseBody: glideUtil.getXMLParameter(current.payload, 'output', true),
-        status: glideUtil.getXMLParameter(current.payload, 'http_status_code', false),
-        payload: String(current.payload)
-    };
-
-    // Get callback info from ecc record payload
-    var callbackClass = glideUtil.getXMLParameter(current.payload, 'callback_class', false);
-    var callbackFunction = glideUtil.getXMLParameter(current.payload, 'callback_function', false);
-    var callbackParameters = glideUtil.getXMLParameter(current.payload, 'callback_parameter_obj', false);
-    var callbackParamObj = JSON.parse(callbackParameters);
-	//gs.info("callbackClass: " + callbackClass + " callbackFunction: " + callbackFunction + " callbackParameters: " + callbackParameters);
-    // Execute the callback function via global scope passing in all required params
-    glideUtil.executeCallbackFunction(responseObj, callbackClass, callbackFunction, callbackParamObj);
-	
+    var queueName = "callback";
+	var eventLimit = 50;
+	var workerLimit = 4;
+	queueName = (new global.AutoScaleEventQueues(eventLimit, workerLimit)).getQueueName(queueName);
+	gs.eventQueue("x_8899_sharing.callback", current, null, null, queueName);
 
 })(current, previous);]]></script>
         <sys_class_name>sys_script</sys_class_name>
         <sys_created_by>admin</sys_created_by>
-        <sys_created_on>2020-09-26 11:37:51</sys_created_on>
+        <sys_created_on>2020-10-05 03:04:51</sys_created_on>
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
-        <sys_id>09e45fa02feb101064e63f96f699b6bf</sys_id>
-        <sys_mod_count>10</sys_mod_count>
-        <sys_name>Async Integration Sensor</sys_name>
+        <sys_id>5e16b39f2faf581064e63f96f699b625</sys_id>
+        <sys_mod_count>9</sys_mod_count>
+        <sys_name>Async Integration Sensor (evnt) v2</sys_name>
         <sys_overrides/>
         <sys_package display_value="Sharing" source="x_8899_sharing">8b8c9c542f13101064e63f96f699b6be</sys_package>
         <sys_policy/>
         <sys_scope display_value="Sharing">8b8c9c542f13101064e63f96f699b6be</sys_scope>
-        <sys_update_name>sys_script_09e45fa02feb101064e63f96f699b6bf</sys_update_name>
+        <sys_update_name>sys_script_5e16b39f2faf581064e63f96f699b625</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2020-10-05 11:19:18</sys_updated_on>
+        <sys_updated_on>2020-10-05 11:34:43</sys_updated_on>
         <template/>
         <when>async</when>
     </sys_script>
-    <sys_translated_text action="delete_multiple" query="documentkey=09e45fa02feb101064e63f96f699b6bf"/>
+    <sys_translated_text action="delete_multiple" query="documentkey=5e16b39f2faf581064e63f96f699b625"/>
 </record_update>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sysevent_script_action">
+    <sysevent_script_action action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <condition_script/>
+        <description/>
+        <event_name>x_8899_sharing.callback</event_name>
+        <name>Process Async Callback</name>
+        <order>100</order>
+        <script><![CDATA[processCallback(current);
+function processCallback(current) {
+	// Processing the response from the ECC queue record
+    var glideUtil = new global.GlobalUtils();
+
+    // Get the response data
+    var responseObj = {
+        responseBody: glideUtil.getXMLParameter(current.payload, 'output', true),
+        status: glideUtil.getXMLParameter(current.payload, 'http_status_code', false),
+        payload: String(current.payload)
+    };
+
+    // Get callback info from ecc record payload
+    var callbackClass = glideUtil.getXMLParameter(current.payload, 'callback_class', false);
+    var callbackFunction = glideUtil.getXMLParameter(current.payload, 'callback_function', false);
+    var callbackParameters = glideUtil.getXMLParameter(current.payload, 'callback_parameter_obj', false);
+    var callbackParamObj = JSON.parse(callbackParameters);
+	//gs.info("callbackClass: " + callbackClass + " callbackFunction: " + callbackFunction + " callbackParameters: " + callbackParameters);
+    // Execute the callback function via global scope passing in all required params
+    glideUtil.executeCallbackFunction(responseObj, callbackClass, callbackFunction, callbackParamObj);
+}]]></script>
+        <synchronous>false</synchronous>
+        <sys_class_name>sysevent_script_action</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2020-10-04 00:54:30</sys_created_on>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>e66ec2cf2feb181064e63f96f699b625</sys_id>
+        <sys_mod_count>1</sys_mod_count>
+        <sys_name>Process Async Callback</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="Sharing" source="x_8899_sharing">8b8c9c542f13101064e63f96f699b6be</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Sharing">8b8c9c542f13101064e63f96f699b6be</sys_scope>
+        <sys_update_name>sysevent_script_action_e66ec2cf2feb181064e63f96f699b625</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2020-10-04 00:54:33</sys_updated_on>
+    </sysevent_script_action>
+</record_update>
