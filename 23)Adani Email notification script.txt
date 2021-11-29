@@ -1,0 +1,75 @@
+22)Adani Email notification script
+
+
+
+(function runMailScript( /* GlideRecord */ current, /* TemplatePrinter */ template,
+    /* Optional EmailOutbound */
+    email, /* Optional GlideRecord */ email_action,
+    /* Optional GlideRecord */
+    event) {
+    var relationship = current.variables.u_relationship_with_employee.getDisplayValue();
+    var na = current.variables.NA.getDisplayValue();
+    var name_of_family_member = current.variables.full_name_of_the_family_member.getDisplayValue();
+    var age = current.variables.age.getDisplayValue();
+    var education = current.variables.education.getDisplayValue();
+    var professional_qualification = current.variables.professional_qualification.getDisplayValue();
+    var status = current.variables.status.getDisplayValue();
+    var occupation = current.variables.occupation.getDisplayValue();
+    var state_government = current.variables.state_government.getDisplayValue();
+    var name_of_employer_company = current.variables.name_of_employer_company.getDisplayValue();
+    var name_of_court = current.variables.name_of_court.getDisplayValue();
+    var name_of_last_employer_company = current.variables.name_of_last_employer_company.getDisplayValue();
+    var current_position = current.variables.current_position.getDisplayValue();
+    var current_location = current.variables.current_location.getDisplayValue();
+    var state = current.variables.state.getDisplayValue();
+    var district = current.variables.district.getDisplayValue();
+    var city = current.variables.city.getDisplayValue();
+    var pin_code = current.variables.pin_code.getDisplayValue();
+    var any_other_information = current.variables.any_other_information.getDisplayValue();
+    var mobile_no_of_the_family_members = current.variables.mobile_no_of_the_family_members.getDisplayValue();
+
+
+
+
+
+
+    template.print('<table border=1 width=100% style="font-family:Adani Bold";>');
+
+    template.print("<tr  style='background-color:#D7DBDD ;' ><th align='center'> Relationship with Employee </th><th align='center'> NA </th><th align='center'> Name of Family Member </th><th align='center'> Age </th><th align='center'> Education </th><th align='center'> Professional Qualification </th><th align='center'> Status </th><th align='center'> Occupation </th><th align='center'> State Government </th><th align='center'> Name of Employer Company </th><th align='center'> Name of Court </th><th align='center'> Name of Last Employer Company </th><th align='center'> Current Position </th><th align='center'> Current Location </th><th align='center'> State </th><th align='center'> District </th><th align='center'> City </th><th align='center'> Pin Code </th><th align='center'> Other Information </th><th align='center'> Mobile Family Members </th></tr>");
+
+	var gr = new GlideRecord('sc_req_item');
+	gr.addQuery('sys_id',current.request_item);
+	gr.query();
+	
+	while (gr.next()) {
+	var relationship = current.variables.u_relationship_with_employee.getDisplayValue();
+    var na = current.variables.NA.getDisplayValue();
+    var name_of_family_member = current.variables.full_name_of_the_family_member.getDisplayValue();
+    var age = current.variables.age.getDisplayValue();
+    var education = current.variables.education.getDisplayValue();
+    var professional_qualification = current.variables.professional_qualification.getDisplayValue();
+    var status = current.variables.status.getDisplayValue();
+    var occupation = current.variables.occupation.getDisplayValue();
+    var state_government = current.variables.state_government.getDisplayValue();
+    var name_of_employer_company = current.variables.name_of_employer_company.getDisplayValue();
+    var name_of_court = current.variables.name_of_court.getDisplayValue();
+    var name_of_last_employer_company = current.variables.name_of_last_employer_company.getDisplayValue();
+    var current_position = current.variables.current_position.getDisplayValue();
+    var current_location = current.variables.current_location.getDisplayValue();
+    var state = current.variables.state.getDisplayValue();
+    var district = current.variables.district.getDisplayValue();
+    var city = current.variables.city.getDisplayValue();
+    var pin_code = current.variables.pin_code.getDisplayValue();
+    var any_other_information = current.variables.any_other_information.getDisplayValue();
+    var mobile_no_of_the_family_members = current.variables.mobile_no_of_the_family_members.getDisplayValue();
+	}
+	
+    template.print("<tr><td>" + relationship + "</td><td>" + na + "</td><td>" + name_of_family_member + "</td><td>" + gr.age + "</td><td>" + gr.education + "</td><td>" + gr.professional_qualification + "</td><td>" + gr.status + "</td><td>" + gr.occupation + "</td><td>" + gr.state_government + "</td><td>" + gr.name_of_employer_company + "</td><td>" + gr.name_of_court + "</td><td>" + gr.name_of_last_employer_company + "</td><td>" + gr.current_position + "</td><td>" + gr.current_location + "</td><td>" + gr.state + "</td><td>" + gr.district + "</td><td>" + gr.city + "</td><td>" + gr.pin_code + "</td><td>" + gr.any_other_information + "</td><td>" + gr.mobile_no_of_the_family_members + "</td></tr>");
+
+
+
+
+    template.print("</table>");
+    // Add your code here
+
+})(current, template, email, email_action, event);
