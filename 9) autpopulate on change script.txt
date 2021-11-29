@@ -1,0 +1,19 @@
+9) autpopulate on change script 
+
+function onChange(control, oldValue, newValue, isLoading) {
+   if (  newValue == '') {
+      return;
+   }
+    var a=g_form.getReference('requested_for',populate);
+    
+	
+	function populate(obj)
+	{
+		g_form.setValue('email',obj.email);
+		g_form.setValue('department',obj.department);
+		g_form.setValue('location',obj.location);
+	
+	}
+		
+	
+}

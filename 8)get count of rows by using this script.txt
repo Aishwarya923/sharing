@@ -1,0 +1,11 @@
+8)get count of rows by using this script 
+
+var usersDetails = new GlideRecord('sys_user');
+
+//usersDetails.getEncodedQuery('managerISNOTEMPTY');
+
+usersDetails.addEncodedQuery("managerISNOTEMPTY");
+
+usersDetails.query();
+
+gs.print(usersDetails.getRowCount());
