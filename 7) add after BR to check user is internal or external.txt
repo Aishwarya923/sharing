@@ -1,0 +1,9 @@
+7) add after BR to check user is internal or external
+
+(function executeRule(current, previous /*null when async*/ ) {
+
+ var email = current.getValue("email");
+if(email.includes("inputzero.com"))
+gs.addInfoMessage("Internal user");
+else
+gs.addInfoMessage("External user");
