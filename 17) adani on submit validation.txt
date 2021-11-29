@@ -1,0 +1,64 @@
+17) adani on submit validation
+
+function onSubmit() {
+    //Type appropriate comment here, and begin script below
+    var affnityData = g_form.getValue('affinity_details_add_details_of_yourself_and_your_family_members');
+    var formMaritalStatus = g_form.getValue('marital_status');
+
+    var affnityDetails = JSON.parse(affnityData);
+    var counter = 0;
+
+    var unmarriedrelation = ['Father', 'Mother', 'Brother', 'Sister', 'Others'];
+    var marriedrelation = ['Spouse', 'Father', 'Mother', 'Brother', 'Sister', 'Child', 'Brother-in-law', 'Sister-in-law', ' Father-in-law', 'Mother-in-law', 'Others'];
+
+    //alert(affnityData);
+
+    if (formMaritalStatus == 'Unmarried') {
+        for (var i = 0; i < unmarriedrelation.length; i++) {
+            var count = 0;
+            for (var j = 0; j < affnityDetails.length; j++) {
+                if (unmarriedrelation[i] == affnityDetails[j].u_relationship_with_employee) {
+                    var familyName = affnityDetails[j].full_name_of_the_family_member;
+                    var na = affnityDetails[j].NA;
+                    count++; // to check relation is available
+                    if ((familyName != '' && na != 'true') || (familyName == '' && na == 'true')) {
+                        // do nothing
+                    } else {
+                        alert('Please Enter the all information against family members');
+                        return false;
+                    }
+
+                }
+            }
+            if (count == 0) {
+                alert('Please Enter the all information against family members');
+                return false;
+            }
+
+        }
+    } else {
+
+        for (var i = 0; i < marriedrelation.length; i++) {
+            var count = 0;
+            for (var j = 0; j < affnityDetails.length; j++) {
+                if (marriedrelation[i] == affnityDetails[j].u_relationship_with_employee) {
+                    var familyName = affnityDetails[j].full_name_of_the_family_member;
+                    var na = affnityDetails[j].NA;
+                    count++; // to check relation is available
+                    if ((familyName != '' && na != 'true') || (familyName == '' && na == 'true')) {
+                        // do nothing
+                    } else {
+                        alert('Please Enter the all information against family members');
+                        return false;
+                    }
+
+                }
+            }
+            if (count == 0) {
+                alert('Please Enter the all information against family members');
+                return false;
+            }
+        }
+    }
+
+}
