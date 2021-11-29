@@ -1,0 +1,6 @@
+5) to make all fields empty on catlog
+
+current.variables.email_subject="";
+current.variables.email_body="";
+current.variables.ready_for_review="";
+current.variables.peer_review_approval="";
