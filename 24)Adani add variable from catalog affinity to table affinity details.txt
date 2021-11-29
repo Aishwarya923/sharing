@@ -1,0 +1,211 @@
+24)Adani add variable from catalog affinity to table affinity details 
+
+
+current.state = 3;
+current.u_category = 'Affinity';
+current.u_subcategory = 'Affinity';
+current.assignment_group = '';
+var requestedForInfo = current.request.requested_for;
+var count = 0;
+var gr_Count = new GlideRecord('u_affinity'); // Get the u_affinity active record count against requested for 
+gr_Count.addQuery('u_requested_for', requestedForInfo);
+gr_Count.addQuery('u_active', true);
+gr_Count.query();
+count = gr_Count.getRowCount();
+
+var obj = JSON.parse(current.variables.affinity_details_add_details_of_yourself_and_your_family_members); //update with your variable name
+var rowcount = obj.length; // Get the RITM MRVS record count
+gs.log('affinity workflow 1' + current.variables.affinity_details_add_details_of_yourself_and_your_family_members);
+
+
+for (var j = 0; j < rowcount; j++) {
+    var flag = false;
+
+    var gr = new GlideRecord('u_affinity'); // Get the affinity_details active record count against requested for 
+    gr.addQuery('u_requested_for', requestedForInfo);
+    gr.addQuery('u_active', true);
+    gr.query();
+
+    while (gr.next()) {
+
+        var variable_Full_Name_Of_Family_Member = '';
+        if (obj[j].full_name_of_the_family_member != undefined) {
+            variable_Full_Name_Of_Family_Member = obj[j].full_name_of_the_family_member;
+        }
+        if (gr.u_full_name_of_the_family_member == variable_Full_Name_Of_Family_Member && gr.u_relationship_with_employee == obj[j].u_relationship_with_employee) {
+
+            // if (gr.u_full_name_of_the_family_member == obj[j].full_name_of_the_family_member && gr.u_relationship_with_employee == obj[j].u_relationship_with_employee) {
+            flag = true;
+
+            // Update the record 
+
+            for (var index in obj[j]) {
+                if (index == 'u_relationship_with_employee') {
+                    gr.u_relationship_with_employee = obj[j][index];
+                } else if (index == 'NA') {
+                    gr.u_na = obj[j][index];
+                } else if (index == 'professional_qualification') {
+                    gr.u_professional_qualification = obj[j][index];
+                } else if (index == 'pin_code') {
+                    gr.u_pin_code = obj[j][index];
+
+                } else if (index == 'occupation') {
+                    gr.u_occupation = obj[j][index];
+
+
+
+                } else if (index == 'name_of_last_employer_company') {
+                    gr.u_name_of_last_employer_company = obj[j][index];
+
+                } else if (index == 'name_of_employer_company') {
+                    gr.u_name_of_employer_company = obj[j][index];
+                } else if (index == 'name_of_court ') {
+                    gr.u_name_of_court = obj[j][index];
+                } else if (index == 'mobile_no_of_the_family_members') {
+                    gr.u_mobile_no_of_the_family_members = obj[j][index];
+                } else if (index == 'full_name_of_the_family_member') {
+                    gr.u_full_name_of_the_family_member = obj[j][index];
+                } else if (index == 'current_location') {
+                    gr.u_current_location = obj[j][index];
+                } else if (index == 'education') {
+                    gr.u_education = obj[j][index];
+                } else if (index == 'district') {
+                    gr.u_district = obj[j][index];
+                } else if (index == 'current_position') {
+                    gr.u_current_position = obj[j][index];
+                    //                 } else if (index == 'birth_date') {
+                    //                     gr.u_birth_date = obj[j][index];
+
+                } else if (index == 'city') {
+                    gr.u_city = obj[j][index];
+                } else if (index == 'any_other_information') {
+                    gr.u_any_other_information = obj[j][index];
+                } else if (index == 'age') {
+                    gr.u_age = obj[j][index];
+                } else if (index == 'status') {
+                    gr.u_status = obj[j][index];
+                } else if (index == 'state_government') {
+                    gr.u_state_government = obj[j][index];
+                } else if (index == 'state') {
+                    gr.u_state = obj[j][index];
+                }
+
+            }
+            gr.u_marital_status = current.variables.marital_status;
+            gr.u_request_item = current.sys_id;
+            gr.u_requested_for = current.variables.u_requested_for;
+            gr.update();
+            gs.log('Affinity workflow Update 79');
+            // return;
+        }
+
+
+    }
+
+    if (flag == false) {
+
+        // Insert this record 
+
+        var grInsert = new GlideRecord('u_affinity');
+        grInsert.initialize();
+
+        for (var index in obj[j]) {
+            if (index == 'u_relationship_with_employee') {
+                grInsert.u_relationship_with_employee = obj[j][index];
+            } else if (index == 'marital_status') {
+                grInsert.u_marital_status = obj[j][index];
+
+            } else if (index == 'NA') {
+                grInsert.u_na = obj[j][index];
+            } else if (index == 'professional_qualification') {
+                grInsert.u_professional_qualification = obj[j][index];
+            } else if (index == 'pin_code') {
+                grInsert.u_pin_code = obj[j][index];
+
+            } else if (index == 'occupation') {
+                grInsert.u_occupation = obj[j][index];
+            } else if (index == 'name_of_last_employer_company') {
+                grInsert.u_name_of_last_employer_company = obj[j][index];
+            } else if (index == 'name_of_employer_company') {
+                grInsert.u_name_of_employer_company = obj[j][index];
+            } else if (index == 'name_of_court') {
+                grInsert.u_name_of_court = obj[j][index];
+            } else if (index == 'mobile_no_of_the_family_members') {
+                grInsert.u_mobile_no_of_the_family_members = obj[j][index];
+            } else if (index == 'full_name_of_the_family_member') {
+                grInsert.u_full_name_of_the_family_member = obj[j][index];
+            } else if (index == 'education') {
+                grInsert.u_education = obj[j][index];
+            } else if (index == 'district') {
+                grInsert.u_district = obj[j][index];
+            } else if (index == 'current_position') {
+                grInsert.u_current_position = obj[j][index];
+            } else if (index == 'current_location') {
+                grInsert.u_current_location = obj[j][index];
+                gs.log("current location" + index);
+            } else if (index == 'city') {
+                grInsert.u_city = obj[j][index];
+            } else if (index == 'any_other_information') {
+                grInsert.u_any_other_information = obj[j][index];
+            } else if (index == 'age') {
+                grInsert.u_age = obj[j][index];
+            } else if (index == 'status') {
+                grInsert.u_status = obj[j][index];
+            } else if (index == 'state_government') {
+                grInsert.u_state_government = obj[j][index];
+            } else if (index == 'state') {
+                grInsert.u_state = obj[j][index];
+            }
+        }
+        //grInsert.u_current_location = current.variables.current_location;
+        grInsert.u_marital_status = current.variables.marital_status;
+        grInsert.u_active = true;
+        grInsert.u_request_item = current.sys_id;
+        grInsert.u_requested_for = current.variables.u_requested_for;
+        grInsert.insert();
+        gs.log('affinity workflow Update 143');
+
+    }
+
+}
+
+
+
+// make record active false which are not in current RITM 
+
+
+var gr = new GlideRecord('u_affinity'); // Get the affinity_details active record count against requested for 
+gr.addQuery('u_requested_for', requestedForInfo);
+gr.addQuery('u_active', true);
+gr.query();
+
+while (gr.next()) {
+    var flag = false;
+
+    for (var j = 0; j < rowcount; j++) {
+        if (obj[j].full_name_of_the_family_member != undefined) {
+            if (gr.u_full_name_of_the_family_member == obj[j].full_name_of_the_family_member && gr.u_relationship_with_employee == obj[j].u_relationship_with_employee) {
+                flag = true;
+
+            }
+        } else {
+            var variable_Full_Name_Of_Family_Member = '';
+
+            if (gr.u_full_name_of_the_family_member == variable_Full_Name_Of_Family_Member && gr.u_relationship_with_employee == obj[j].u_relationship_with_employee) {
+                flag = true;
+
+            }
+        }
+    }
+
+    if (flag == false) {
+
+        gr.u_active = false;
+        gr.u_request_item = current.sys_id;
+        gr.u_requested_for = current.variables.u_requested_for;
+        gr.update();
+        gs.log('affinity workflow Update 174');
+
+    }
+
+}
