@@ -1,0 +1,27 @@
+20) adani call script include to get marital status from affinity table 
+
+
+function onChange(control, oldValue, newValue, isLoading) {
+    if (newValue == '') {
+        g_form.clearValue('marital_status');
+        return;
+    }
+    g_form.clearValue('marital_status');
+    var a = g_form.getValue('u_requested_for');
+    var g = new GlideAjax('Adani_affinity_marital_status');
+    g.addParam('sysparm_name', 'getlinkinfo');
+    g.addParam('sys_param_a', a);
+    g.getXML(PopulateExixtingDetails);
+
+    function PopulateExixtingDetails(response) {
+
+        var answer = response.responseXML.documentElement.getAttribute("answer");
+       // alert(answer);
+        if (answer != null) {
+            g_form.setValue('marital_status', answer);
+        }
+        //alert(answer);
+        //Type appropriate comment here, and begin script below
+
+    }
+}
