@@ -1,0 +1,577 @@
+17) adani get data from affinity table on load of affinity catalog script include
+
+
+var Adani_Affinity_Details = Class.create();
+Adani_Affinity_Details.prototype = Object.extendsObject(AbstractAjaxProcessor, {
+    AffinityExistingDetails: function() {
+        var requestedForInfo = this.getParameter("sysparm_req_for_info");
+        var formMaritalStatus = this.getParameter("sysparm_marital_status_info");
+
+        var gr1 = new GlideRecord('u_affinity');
+        gr1.addQuery('u_requested_for', requestedForInfo);
+        gr1.addQuery('u_active', true);
+        gr1.query();
+
+        if (gr1.next()) {
+            var result = '';
+            var masterMartialStatus = gr1.u_marital_status;
+
+            if (masterMartialStatus == formMaritalStatus) {
+                // get the master table data
+                result = this.getMasterInfo(requestedForInfo);
+
+
+            } else if (formMaritalStatus == 'Married') {
+                // get master table data and add in-laws data as well
+                result = this.getMasterInfo_emptyInfo(requestedForInfo);
+            } else {
+                // get unmaried info only from master data
+                result = this.getMasterInfo_onlyUnMarried(requestedForInfo);
+            }
+
+            return result;
+
+        } else {
+            return this.getEmptyRowsInfo(formMaritalStatus);
+
+        }
+
+
+    },
+
+
+    getMasterInfo: function(requestedForInfo) {
+        var array = [];
+        var gr = new GlideRecord('u_affinity');
+        gr.addQuery('u_requested_for', requestedForInfo);
+        gr.addQuery('u_active', true);
+        gr.query();
+        while (gr.next()) {
+
+            var obj = {};
+            obj.u_relationship_with_employee = gr.u_relationship_with_employee + '';
+            obj.NA = gr.u_na + '';
+            obj.full_name_of_the_family_member = gr.u_full_name_of_the_family_member + '';
+            obj.age = gr.u_age + '';
+            obj.education = gr.u_education + '';
+            obj.professional_qualification = gr.u_professional_qualification + '';
+            obj.status = gr.u_status + '';
+            obj.occupation = gr.u_occupation + '';
+            obj.state_government = gr.u_state_government + '';
+            obj.name_of_employer_company = gr.u_name_of_employer_company + '';
+            obj.name_of_court = gr.u_name_of_court + '';
+            obj.name_of_last_employer_company = gr.u_name_of_last_employer_company + '';
+            obj.current_position = gr.u_current_position + '';
+            obj.current_location = gr.u_current_location + '';
+            obj.state = gr.u_state + '';
+            obj.district = gr.u_district + '';
+            obj.city = gr.u_city + '';
+            obj.pin_code = gr.u_pin_code + '';
+            obj.any_other_information = gr.u_any_other_information + '';
+            obj.mobile_no_of_the_family_members = gr.u_mobile_no_of_the_family_members + '';
+
+            if (gr.u_relationship_with_employee != '' && gr.u_relationship_with_employee != 'null' && gr.u_relationship_with_employee != undefined) {
+                obj.u_relationship_with_employee = gr.getValue('u_relationship_with_employee');
+            } else {
+                obj.u_relationship_with_employee = '';
+            }
+            if (gr.u_na == 'false') {
+                obj.NA = 'false';
+            } else if (gr.u_na == 'true') {
+                obj.NA = 'true';
+            }
+
+            if (gr.u_full_name_of_the_family_member != '' && gr.u_full_name_of_the_family_member != null && gr.u_full_name_of_the_family_member != undefined) {
+                obj.full_name_of_the_family_member = gr.u_full_name_of_the_family_member + '';
+            } else {
+                obj.full_name_of_the_family_member = '';
+            }
+
+            if (gr.u_age != '' && gr.u_age != null && gr.u_age != undefined) {
+                obj.age = gr.u_age+'';
+            } else {
+                obj.age = '';
+            }
+
+            if (gr.u_education != '' && gr.u_education != null && gr.u_education != undefined) {
+                obj.education = gr.getValue('u_education');
+            } else {
+                obj.education = '';
+            }
+
+            if (gr.u_professional_qualification != '' && gr.u_professional_qualification != null && gr.u_professional_qualification != undefined) {
+                obj.professional_qualification = gr.getValue('u_professional_qualification');
+            } else {
+                obj.professional_qualification = '';
+            }
+            if (gr.u_status != '' && gr.u_status != null && gr.u_status != undefined) {
+                obj.status = gr.getValue('u_status');
+            } else {
+                obj.status = '';
+            }
+            if (gr.u_occupation != '' && gr.u_occupation != null && gr.u_occupation != undefined) {
+                obj.occupation = gr.getValue('u_occupation');
+            } else {
+                obj.occupation = '';
+            }
+            if (gr.u_state_government != '' && gr.u_state_government != null && gr.u_state_government != undefined) {
+                obj.state_government = gr.getValue('u_state_government');
+            } else {
+                obj.state_government = '';
+            }
+            if (gr.u_name_of_employer_company != '' && gr.u_name_of_employer_company != null && gr.u_name_of_employer_company != undefined) {
+                obj.name_of_employer_company = gr.u_name_of_employer_company + '';
+            } else {
+                obj.name_of_employer_company = '';
+            }
+            if (gr.u_name_of_court != '' && gr.u_name_of_court != null && gr.u_name_of_court != undefined) {
+                obj.name_of_court = gr.u_name_of_court + '';
+            } else {
+                obj.name_of_court = '';
+            }
+            if (gr.u_name_of_last_employer_company != '' && gr.u_name_of_last_employer_company != null && gr.u_name_of_last_employer_company != undefined) {
+                obj.name_of_last_employer_company = gr.u_name_of_last_employer_company + '';
+            } else {
+                obj.name_of_last_employer_company = '';
+            }
+            if (gr.u_state != '' && gr.u_state != null && gr.u_state != undefined) {
+                obj.state = gr.getValue('u_state');
+            } else {
+                obj.state = '';
+            }
+            if (gr.u_district != '' && gr.u_district != null && gr.u_district != undefined) {
+                obj.district = gr.getValue('u_district');
+            } else {
+                obj.district = '';
+            }
+            if (gr.u_city != '' && gr.u_city != null && gr.u_city != undefined) {
+                obj.city = gr.u_city + '';
+            } else {
+                obj.city = '';
+            }
+            if (gr.u_pin_code != '' && gr.u_pin_code != null && gr.u_pin_code != undefined) {
+                obj.pin_code = gr.u_pin_code + '';
+            } else {
+                obj.pin_code = '';
+            }
+            if (gr.u_any_other_information != '' && gr.u_any_other_information != null && gr.u_any_other_information != undefined) {
+                obj.any_other_information = gr.u_any_other_information + '';
+            } else {
+                obj.any_other_information = '';
+            }
+            if (gr.u_mobile_no_of_the_family_members != '' && gr.u_mobile_no_of_the_family_members != null && gr.u_mobile_no_of_the_family_members != undefined) {
+                obj.mobile_no_of_the_family_members = gr.u_mobile_no_of_the_family_members + '';
+            } else {
+                obj.mobile_no_of_the_family_members = '';
+            }
+            array.push(obj);
+
+        }
+        var obj1 = {};
+        obj1.affnityDetails = array;
+
+        var result = JSON.stringify(obj1);
+        return result;
+
+
+    },
+
+    getEmptyRowsInfo: function(formMaritalStatus) {
+
+
+        var myJson;
+        var unmarriedrelation = ['Father', 'Mother', 'Brother', 'Sister', 'Others'];
+        var marriedrelation = ['Spouse', 'Father', 'Mother', 'Brother', 'Sister', 'Child', 'Brother-in-law', 'Sister-in-law', ' Father-in-law', 'Mother-in-law', 'Others'];
+        var array = [];
+        if (formMaritalStatus == 'Unmarried') {
+
+            for (var i = 0; i < unmarriedrelation.length; i++) {
+                //y[i].style.display = 'none';
+                myJson = {
+                    "u_relationship_with_employee": unmarriedrelation[i],
+                    "full_name_of_the_family_member": '',
+                    "age": '',
+                    "education": '',
+                    "professional_qualification": '',
+                    "status": '',
+                    "occupation": '',
+                    "state_government": '',
+                    "name_of_employer_company": '',
+                    "name_of_court": '',
+                    "name_of_last_employer_company": '',
+                    "current_position": '',
+                    "current_location": '',
+                    "state": '',
+                    "district": '',
+                    "city": '',
+                    "pin_code": '',
+                    "any_other_information": '',
+                    "mobile_no_of_the_family_members": '',
+
+                };
+                array.push(myJson);
+
+            }
+
+        } else if (formMaritalStatus == 'Married') {
+            var Obj = [];
+            for (var j = 0; j < marriedrelation.length; j++) {
+
+                myJson = {
+                    "u_relationship_with_employee": marriedrelation[j],
+                    "full_name_of_the_family_member": '',
+                    "age": '',
+                    "education": '',
+                    "professional_qualification": '',
+                    "status": '',
+                    "occupation": '',
+                    "state_government": '',
+                    "name_of_employer_company": '',
+                    "name_of_court": '',
+                    "name_of_last_employer_company": '',
+                    "current_position": '',
+                    "current_location": '',
+                    "state": '',
+                    "district": '',
+                    "city": '',
+                    "pin_code": '',
+                    "any_other_information": '',
+                    "mobile_no_of_the_family_members": '',
+
+                };
+                array.push(myJson);
+
+            }
+
+        }
+
+        var obj1 = {};
+        obj1.affnityDetails = array;
+
+        var result = JSON.stringify(obj1);
+        return result;
+
+    },
+
+    getMasterInfo_emptyInfo: function(requestedForInfo) {
+        var array = [];
+        var gr = new GlideRecord('u_affinity');
+        gr.addQuery('u_requested_for', requestedForInfo);
+        gr.addQuery('u_active', true);
+        gr.query();
+        while (gr.next()) {
+
+            var obj = {};
+            obj.u_relationship_with_employee = gr.u_relationship_with_employee + '';
+            obj.NA = gr.u_na + '';
+            obj.full_name_of_the_family_member = gr.u_full_name_of_the_family_member + '';
+            obj.age = gr.u_age + '';
+            obj.education = gr.u_education + '';
+            obj.professional_qualification = gr.u_professional_qualification + '';
+            obj.status = gr.u_status + '';
+            obj.occupation = gr.u_occupation + '';
+            obj.state_government = gr.u_state_government + '';
+            obj.name_of_employer_company = gr.u_name_of_employer_company + '';
+            obj.name_of_court = gr.u_name_of_court + '';
+            obj.name_of_last_employer_company = gr.u_name_of_last_employer_company + '';
+            obj.current_position = gr.u_current_position + '';
+            obj.current_location = gr.u_current_location + '';
+            obj.state = gr.u_state + '';
+            obj.district = gr.u_district + '';
+            obj.city = gr.u_city + '';
+            obj.pin_code = gr.u_pin_code + '';
+            obj.any_other_information = gr.u_any_other_information + '';
+            obj.mobile_no_of_the_family_members = gr.u_mobile_no_of_the_family_members + '';
+
+            if (gr.u_relationship_with_employee != '' && gr.u_relationship_with_employee != 'null' && gr.u_relationship_with_employee != undefined) {
+                obj.u_relationship_with_employee = gr.getValue('u_relationship_with_employee');
+            } else {
+                obj.u_relationship_with_employee = '';
+            }
+            if (gr.u_na == 'false') {
+                obj.NA = 'false';
+            } else if (gr.u_na == 'true') {
+                obj.NA = 'true';
+            }
+
+            if (gr.u_full_name_of_the_family_member != '' && gr.u_full_name_of_the_family_member != null && gr.u_full_name_of_the_family_member != undefined) {
+                obj.full_name_of_the_family_member = gr.u_full_name_of_the_family_member + '';
+            } else {
+                obj.full_name_of_the_family_member = '';
+            }
+
+            if (gr.u_age != '' && gr.u_age != null && gr.u_age != undefined) {
+                obj.age = gr.u_age+'';
+            } else {
+                obj.age = '';
+            }
+
+            if (gr.u_education != '' && gr.u_education != null && gr.u_education != undefined) {
+                obj.education = gr.getValue('u_education');
+            } else {
+                obj.education = '';
+            }
+
+            if (gr.u_professional_qualification != '' && gr.u_professional_qualification != null && gr.u_professional_qualification != undefined) {
+                obj.professional_qualification = gr.getValue('u_professional_qualification');
+            } else {
+                obj.professional_qualification = '';
+            }
+            if (gr.u_status != '' && gr.u_status != null && gr.u_status != undefined) {
+                obj.status = gr.getValue('u_status');
+            } else {
+                obj.status = '';
+            }
+            if (gr.u_occupation != '' && gr.u_occupation != null && gr.u_occupation != undefined) {
+                obj.occupation = gr.getValue('u_occupation');
+            } else {
+                obj.occupation = '';
+            }
+            if (gr.u_state_government != '' && gr.u_state_government != null && gr.u_state_government != undefined) {
+                obj.state_government = gr.getValue('u_state_government');
+            } else {
+                obj.state_government = '';
+            }
+            if (gr.u_name_of_employer_company != '' && gr.u_name_of_employer_company != null && gr.u_name_of_employer_company != undefined) {
+                obj.name_of_employer_company = gr.u_name_of_employer_company + '';
+            } else {
+                obj.name_of_employer_company = '';
+            }
+            if (gr.u_name_of_court != '' && gr.u_name_of_court != null && gr.u_name_of_court != undefined) {
+                obj.name_of_court = gr.u_name_of_court + '';
+            } else {
+                obj.name_of_court = '';
+            }
+            if (gr.u_name_of_last_employer_company != '' && gr.u_name_of_last_employer_company != null && gr.u_name_of_last_employer_company != undefined) {
+                obj.name_of_last_employer_company = gr.u_name_of_last_employer_company + '';
+            } else {
+                obj.name_of_last_employer_company = '';
+            }
+            if (gr.u_state != '' && gr.u_state != null && gr.u_state != undefined) {
+                obj.state = gr.getValue('u_state');
+            } else {
+                obj.state = '';
+            }
+            if (gr.u_district != '' && gr.u_district != null && gr.u_district != undefined) {
+                obj.district = gr.getValue('u_district');
+            } else {
+                obj.district = '';
+            }
+            if (gr.u_city != '' && gr.u_city != null && gr.u_city != undefined) {
+                obj.city = gr.u_city + '';
+            } else {
+                obj.city = '';
+            }
+            if (gr.u_pin_code != '' && gr.u_pin_code != null && gr.u_pin_code != undefined) {
+                obj.pin_code = gr.u_pin_code + '';
+            } else {
+                obj.pin_code = '';
+            }
+            if (gr.u_any_other_information != '' && gr.u_any_other_information != null && gr.u_any_other_information != undefined) {
+                obj.any_other_information = gr.u_any_other_information + '';
+            } else {
+                obj.any_other_information = '';
+            }
+            if (gr.u_mobile_no_of_the_family_members != '' && gr.u_mobile_no_of_the_family_members != null && gr.u_mobile_no_of_the_family_members != undefined) {
+                obj.mobile_no_of_the_family_members = gr.u_mobile_no_of_the_family_members + '';
+            } else {
+                obj.mobile_no_of_the_family_members = '';
+            }
+            array.push(obj);
+
+        }
+        var marriedrelation = ['Spouse', 'Child', 'Brother-in-law', 'Sister-in-law', ' Father-in-law', 'Mother-in-law'];
+
+        for (var j = 0; j < marriedrelation.length; j++) {
+
+            myJson = {
+                "u_relationship_with_employee": marriedrelation[j],
+                "full_name_of_the_family_member": '',
+                "age": '',
+                "education": '',
+                "professional_qualification": '',
+                "status": '',
+                "occupation": '',
+                "state_government": '',
+                "name_of_employer_company": '',
+                "name_of_court": '',
+                "name_of_last_employer_company": '',
+                "current_position": '',
+                "current_location": '',
+                "state": '',
+                "district": '',
+                "city": '',
+                "pin_code": '',
+                "any_other_information": '',
+                "mobile_no_of_the_family_members": '',
+
+            };
+            array.push(myJson);
+
+        }
+
+
+        var obj1 = {};
+        obj1.affnityDetails = array;
+
+        var result = JSON.stringify(obj1);
+        return result;
+
+
+    },
+
+
+    getMasterInfo_onlyUnMarried: function(requestedForInfo) {
+
+        var unmarriedrelation = ['Father', 'Mother', 'Brother', 'Sister', 'Others'];
+        var array = [];
+        var gr = new GlideRecord('u_affinity');
+        gr.addQuery('u_requested_for', requestedForInfo);
+        gr.addQuery('u_active', true);
+        gr.query();
+        while (gr.next()) {
+
+            for (var j = 0; j < unmarriedrelation.length; j++) {
+                if (unmarriedrelation[j] == gr.u_relationship_with_employee) {
+
+                    var obj = {};
+                    obj.u_relationship_with_employee = gr.u_relationship_with_employee + '';
+                    obj.NA = gr.u_na + '';
+                    obj.full_name_of_the_family_member = gr.u_full_name_of_the_family_member + '';
+                    obj.age = gr.u_age + '';
+                    obj.education = gr.u_education + '';
+                    obj.professional_qualification = gr.u_professional_qualification + '';
+                    obj.status = gr.u_status + '';
+                    obj.occupation = gr.u_occupation + '';
+                    obj.state_government = gr.u_state_government + '';
+                    obj.name_of_employer_company = gr.u_name_of_employer_company + '';
+                    obj.name_of_court = gr.u_name_of_court + '';
+                    obj.name_of_last_employer_company = gr.u_name_of_last_employer_company + '';
+                    obj.current_position = gr.u_current_position + '';
+                    obj.current_location = gr.u_current_location + '';
+                    obj.state = gr.u_state + '';
+                    obj.district = gr.u_district + '';
+                    obj.city = gr.u_city + '';
+                    obj.pin_code = gr.u_pin_code + '';
+                    obj.any_other_information = gr.u_any_other_information + '';
+                    obj.mobile_no_of_the_family_members = gr.u_mobile_no_of_the_family_members + '';
+
+                    if (gr.u_relationship_with_employee != '' && gr.u_relationship_with_employee != 'null' && gr.u_relationship_with_employee != undefined) {
+                        obj.u_relationship_with_employee = gr.getValue('u_relationship_with_employee');
+                    } else {
+                        obj.u_relationship_with_employee = '';
+                    }
+                    if (gr.u_na == 'false') {
+                        obj.NA = 'false';
+                    } else if (gr.u_na == 'true') {
+                        obj.NA = 'true';
+                    }
+
+                    if (gr.u_full_name_of_the_family_member != '' && gr.u_full_name_of_the_family_member != null && gr.u_full_name_of_the_family_member != undefined) {
+                        obj.full_name_of_the_family_member = gr.u_full_name_of_the_family_member + '';
+                    } else {
+                        obj.full_name_of_the_family_member = '';
+                    }
+
+                    if (gr.u_age != '' && gr.u_age != null && gr.u_age != undefined) {
+                        obj.age = gr.u_age+'';
+                    } else {
+                        obj.age = '';
+                    }
+
+                    if (gr.u_education != '' && gr.u_education != null && gr.u_education != undefined) {
+                        obj.education = gr.getValue('u_education');
+                    } else {
+                        obj.education = '';
+                    }
+
+                    if (gr.u_professional_qualification != '' && gr.u_professional_qualification != null && gr.u_professional_qualification != undefined) {
+                        obj.professional_qualification = gr.getValue('u_professional_qualification');
+                    } else {
+                        obj.professional_qualification = '';
+                    }
+                    if (gr.u_status != '' && gr.u_status != null && gr.u_status != undefined) {
+                        obj.status = gr.getValue('u_status');
+                    } else {
+                        obj.status = '';
+                    }
+                    if (gr.u_occupation != '' && gr.u_occupation != null && gr.u_occupation != undefined) {
+                        obj.occupation = gr.getValue('u_occupation');
+                    } else {
+                        obj.occupation = '';
+                    }
+                    if (gr.u_state_government != '' && gr.u_state_government != null && gr.u_state_government != undefined) {
+                        obj.state_government = gr.getValue('u_state_government');
+                    } else {
+                        obj.state_government = '';
+                    }
+                    if (gr.u_name_of_employer_company != '' && gr.u_name_of_employer_company != null && gr.u_name_of_employer_company != undefined) {
+                        obj.name_of_employer_company = gr.u_name_of_employer_company + '';
+                    } else {
+                        obj.name_of_employer_company = '';
+                    }
+                    if (gr.u_name_of_court != '' && gr.u_name_of_court != null && gr.u_name_of_court != undefined) {
+                        obj.name_of_court = gr.u_name_of_court + '';
+                    } else {
+                        obj.name_of_court = '';
+                    }
+                    if (gr.u_name_of_last_employer_company != '' && gr.u_name_of_last_employer_company != null && gr.u_name_of_last_employer_company != undefined) {
+                        obj.name_of_last_employer_company = gr.u_name_of_last_employer_company + '';
+                    } else {
+                        obj.name_of_last_employer_company = '';
+                    }
+                    if (gr.u_state != '' && gr.u_state != null && gr.u_state != undefined) {
+                        obj.state = gr.getValue('u_state');
+                    } else {
+                        obj.state = '';
+                    }
+                    if (gr.u_district != '' && gr.u_district != null && gr.u_district != undefined) {
+                        obj.district = gr.getValue('u_district');
+                    } else {
+                        obj.district = '';
+                    }
+                    if (gr.u_city != '' && gr.u_city != null && gr.u_city != undefined) {
+                        obj.city = gr.u_city + '';
+                    } else {
+                        obj.city = '';
+                    }
+                    if (gr.u_pin_code != '' && gr.u_pin_code != null && gr.u_pin_code != undefined) {
+                        obj.pin_code = gr.u_pin_code + '';
+                    } else {
+                        obj.pin_code = '';
+                    }
+                    if (gr.u_any_other_information != '' && gr.u_any_other_information != null && gr.u_any_other_information != undefined) {
+                        obj.any_other_information = gr.u_any_other_information + '';
+                    } else {
+                        obj.any_other_information = '';
+                    }
+                    if (gr.u_mobile_no_of_the_family_members != '' && gr.u_mobile_no_of_the_family_members != null && gr.u_mobile_no_of_the_family_members != undefined) {
+                        obj.mobile_no_of_the_family_members = gr.u_mobile_no_of_the_family_members + '';
+                    } else {
+                        obj.mobile_no_of_the_family_members = '';
+                    }
+                    array.push(obj);
+
+                    break;
+                }
+            }
+
+
+        }
+        var obj1 = {};
+        obj1.affnityDetails = array;
+
+        var result = JSON.stringify(obj1);
+        return result;
+
+
+
+
+    },
+
+
+
+
+
+    type: 'Adani_Affinity_Details'
+});
