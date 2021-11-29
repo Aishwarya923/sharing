@@ -1,0 +1,15 @@
+14)aadhar card name validation 
+   
+function onChange(control, oldValue, newValue, isLoading) {
+if (isLoading || newValue == '') {
+return;
+}
+var pattern = /^[a-zA-Z ]*$/;
+if(!pattern.test(newValue))
+{
+alert('Please enter valid Name');
+g_form.setValue('aadhar_name', '');
+}
+//Type appropriate comment here, and begin script below
+
+}
