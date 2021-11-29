@@ -1,0 +1,15 @@
+4)To update data in list view of incident table with random user name from user table.
+
+var gr= new GlideRecord('incident'); 
+gr.addQuery('caller_id=NULL'); 
+gr.addQuery('active', true);
+gr.query();  
+var gru= new GlideRecord('sys_user');
+gru.addQuery('active', true);
+gru.query();
+while (gru.next() && gr.next()) 
+{  
+gs.print(gr.getValue('number'));
+gr.caller_id=gru.sys_id;
+gr.update();
+}
