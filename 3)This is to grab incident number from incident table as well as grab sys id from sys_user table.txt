@@ -1,0 +1,20 @@
+3)This is to grab incident number from incident table as well as grab sys id from sys_user table
+
+var gr= new GlideRecord('incident'); 
+gr.addQuery('caller_id=NULL'); 
+gr.addQuery('active', true);
+gr.query();  
+while (gr.next()) 
+{  
+gs.print(gr.getValue('number'));
+}
+gr.query();  
+
+var gru= new GlideRecord('sys_user'); 
+gru.addQuery('active', true);
+gru.query();  
+while (gru.next()) 
+{  
+gs.print(gru.getValue('sys_id'));
+}
+gru.query();        
