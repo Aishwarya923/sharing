@@ -1,0 +1,21 @@
+19) adani script include to get marital status from affinity table 
+
+
+var Adani_affinity_marital_status = Class.create();
+Adani_affinity_marital_status.prototype = Object.extendsObject(AbstractAjaxProcessor, {
+    getlinkinfo: function() {
+        var a =this.getParameter("sys_param_a");
+        var gr = new GlideRecord('u_affinity');
+        gr.addQuery('u_requested_for', a);
+        gr.addQuery('u_active', true);
+        gr.query();
+        if (gr.next()) {
+            var info = gr.u_marital_status;
+
+        }
+        return info;
+
+    },
+
+    type: 'Adani_affinity_marital_status'
+});
