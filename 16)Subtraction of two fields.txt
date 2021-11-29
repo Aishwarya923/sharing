@@ -1,0 +1,12 @@
+16)Subtraction of two fields
+   
+function onChange(control, oldValue, newValue, isLoading) {
+    if (isLoading || newValue == '') {
+        return;
+    }
+
+    var co = g_form.getValue('new_arc',10);
+    var ca = g_form.getValue('old_arc',10);
+    var total = parseInt(co) - parseInt(ca);
+    g_form.setValue('difference', total);
+}
