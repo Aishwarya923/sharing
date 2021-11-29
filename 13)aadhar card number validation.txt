@@ -1,0 +1,15 @@
+13)aadhar card number validation 
+   
+function onChange(control, oldValue, newValue, isLoading) {
+if (isLoading || newValue == '') {
+return;
+}
+var length=newValue.length;
+if(length<12)
+{
+alert('Please enter 12 digits adhar number');
+g_form.setValue('aadhar_number','');
+}
+//Type appropriate comment here, and begin script below
+
+}
