@@ -1,0 +1,10 @@
+6) send notification to the members in the perticular departmet 
+
+var gr=new GlideRecord('sys_user');
+gr.addQuery('department',current.variables.department);
+gr.addActiveQuery();
+gr.query();
+while(gr.next())
+	{
+		gs.eventQueue('Send for peer review',current,gr.sys_id.toString());
+	}
