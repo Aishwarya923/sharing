@@ -1,0 +1,7 @@
+11)On load of form set value on form by using this method
+   
+function onLoad() {
+    //Type appropriate comment here, and begin script below
+
+    g_form.setValue('first_name',g_user.getFullName());
+}
