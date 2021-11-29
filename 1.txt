@@ -1,0 +1,19 @@
+1) On incident table if caller _id = null means caller name is empty and we need to fill that field with user name we need to follow this code .....where gr is object and counter is variable....(%2==0)this condition is basically used to select even incident number..... gr.setvalue is method which is used to set name of user as caller name.... these types of codes are basically used on background scripts.
+
+var gr = new GlideRecord('incident');
+gr.addEncodedQuery("caller_id=NULL");
+gr.query();
+var counter=0;
+while(gr.next())
+{
+//gs.print(gr.number);
+if(counter %2==0)
+{
+gr.setValue('caller_id','dc6053dcd7011200f2d224837e6103e0');
+}
+else
+{
+gr.setValue('caller_id','800b174138d089c868d09de320f9833b');
+}
+gr.update();
+counter++;
