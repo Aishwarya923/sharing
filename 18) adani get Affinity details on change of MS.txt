@@ -1,0 +1,55 @@
+18) adani get Affinity details on change of MS
+
+function onChange(control, oldValue, newValue, isLoading) {
+    if (isLoading) {
+        return;
+    }
+    if (newValue == '') {
+        g_form.clearValue('affinity_details_add_details_of_yourself_and_your_family_members');
+        return;
+    }
+
+    var formMaritalStatus = g_form.getValue("marital_status").toString();
+
+    if (typeof(Storage) !== "undefined") {
+        sessionStorage.setItem("feasibilityMRVdata", "" + formMaritalStatus);
+    } else {
+        alert("Sorry, your browser does not support Web Storage...");
+    }
+
+    var requestedForInfo = g_form.getValue('u_requested_for');
+   // alert(formMaritalStatus);
+    var g = new GlideAjax('Adani_Affinity_Details');
+    g.addParam('sysparm_name', 'AffinityExistingDetails');
+    g.addParam('sysparm_req_for_info', requestedForInfo);
+    g.addParam('sysparm_marital_status_info', formMaritalStatus);
+    g.getXML(PopulateExixtingDetails);
+
+    function PopulateExixtingDetails(response) {
+
+        var answer = response.responseXML.documentElement.getAttribute("answer");
+
+       // alert(answer);
+
+        var result = JSON.parse(answer);
+        g_form.setValue('affinity_details_add_details_of_yourself_and_your_family_members', JSON.stringify(result.affnityDetails));
+        //timeout function to wait for MRV load	
+        setTimeout(function() {
+            disableButtons();
+        }, 2000);
+        setTimeout(function() {
+            var y = this.document.getElementsByClassName("wrapper-xs fa fa-close");
+            var j;
+            for (j = 0; j < y.length; j++) {
+
+                y[j].style.display = 'none';
+
+            }
+        }, 1000);
+
+    }
+
+
+    //Type appropriate comment here, and begin script below
+
+}
