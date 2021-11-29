@@ -1,0 +1,12 @@
+15)Addition of two fields
+   
+function onChange(control, oldValue, newValue, isLoading) {
+    if (isLoading || newValue == '') {
+        return;
+    }
+
+    var co = g_form.getValue('otc',10);
+    var ca = g_form.getValue('difference',10);
+    var total = parseInt(co) + parseInt(ca);
+    g_form.setValue('total_additional_cost', total);
+}
